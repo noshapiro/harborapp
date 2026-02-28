@@ -1,0 +1,35 @@
+/**
+ * Harbor — design tokens (colors, spacing, layout)
+ */
+:root {
+  --ink: #1a1a2e;
+  --deep: #0a0e1a;
+  --ocean: #0f3460;
+  --wave: #16213e;
+  --foam: #e8e4d9;
+  --parchment: #f5f0e8;
+  --sand: #c9b99a;
+  --gold: #c4972f;
+  --bg: #0d0f18;
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+
+  /* Spacing (8px grid) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Layout */
+  --screen-padding-h: 24px;
+  --card-padding-h: 18px;
+  --card-padding-v: 16px;
+  --card-border-radius: 10px;
+  --button-height: 56px;
+  --button-height-secondary: 52px;
+  --button-border-radius: 12px;
+  --tab-bar-height: 72px;
+  --header-height: 56px;
+}

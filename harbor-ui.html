@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harbor — UI Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #1a1a2e; --deep: #0d1b2a; --ocean: #0f3460; --wave: #16213e;
+    --foam: #e8e4d9; --parchment: #f5f0e8; --sand: #c9b99a; --gold: #c4972f;
+  }
+  body { font-family: 'Crimson Pro', serif; background: var(--deep); color: var(--foam); min-height: 100vh; overflow-x: hidden; }
+
+  .nav { display:flex; justify-content:center; gap:6px; padding:24px 32px 0; flex-wrap:wrap; }
+  .nav button { background:transparent; border:1px solid rgba(232,228,217,0.2); color:var(--foam); padding:8px 18px; border-radius:24px; font-family:'Crimson Pro',serif; font-size:14px; cursor:pointer; letter-spacing:0.05em; transition:all 0.3s; opacity:0.6; }
+  .nav button.active, .nav button:hover { border-color:var(--sand); color:var(--parchment); opacity:1; background:rgba(201,185,154,0.08); }
+
+  .screen { display:none; }
+  .screen.active { display:block; }
+
+  /* SPLASH */
+  .splash { height:100vh; position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .ocean-bg { position:absolute; inset:0; background:linear-gradient(180deg,#0a0e1a 0%,#0d1b2a 30%,#0f2d44 55%,#1a4060 75%,#0d2535 100%); }
+  .stars { position:absolute; inset:0; overflow:hidden; }
+  .star { position:absolute; border-radius:50%; background:white; animation:twinkle var(--d,3s) infinite alternate; opacity:var(--o,0.6); }
+  @keyframes twinkle { from{opacity:var(--o,0.3);transform:scale(1)} to{opacity:calc(var(--o,0.3)*0.3);transform:scale(0.7)} }
+  .waves-container { position:absolute; bottom:0; left:0; width:100%; height:45%; }
+  .wave { position:absolute; width:200%; left:-50%; border-radius:50%; }
+  .wave-1 { bottom:0; height:200px; background:rgba(13,52,96,0.9); animation:wave1 8s ease-in-out infinite; }
+  .wave-2 { bottom:20px; height:180px; background:rgba(22,33,62,0.7); animation:wave2 10s ease-in-out infinite; }
+  .wave-3 { bottom:40px; height:160px; background:rgba(15,52,96,0.5); animation:wave3 12s ease-in-out infinite; }
+  @keyframes wave1 { 0%,100%{transform:translateX(0) scaleY(1)} 50%{transform:translateX(-5%) scaleY(1.05)} }
+  @keyframes wave2 { 0%,100%{transform:translateX(-3%)} 50%{transform:translateX(5%)} }
+  @keyframes wave3 { 0%,100%{transform:translateX(2%)} 50%{transform:translateX(-7%)} }
+  .bottle-container { position:absolute; bottom:28%; left:50%; transform:translateX(-50%); animation:bottleDrift 6s ease-in-out infinite; z-index:10; }
+  @keyframes bottleDrift {
+    0%,100%{transform:translateX(-50%) rotate(-5deg) translateY(0)}
+    33%{transform:translateX(calc(-50% + 12px)) rotate(3deg) translateY(-8px)}
+    66%{transform:translateX(calc(-50% - 8px)) rotate(-8deg) translateY(4px)}
+  }
+  .bottle { width:52px; height:120px; position:relative; }
+  .bottle svg { width:100%; height:100%; filter:drop-shadow(0 8px 20px rgba(0,0,0,0.5)); }
+  .splash-content { position:relative; z-index:20; text-align:center; padding:32px; margin-bottom:200px; }
+  .splash-title { font-family:'Cormorant Garamond',serif; font-size:72px; font-weight:300; letter-spacing:0.15em; color:var(--foam); line-height:1; margin-bottom:16px; animation:fadeUp 1.2s ease-out both; }
+  .splash-subtitle { font-size:16px; font-weight:300; color:var(--sand); letter-spacing:0.1em; font-style:italic; animation:fadeUp 1.2s 0.3s ease-out both; opacity:0; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .splash-cta { position:absolute; bottom:8%; left:50%; transform:translateX(-50%); z-index:20; text-align:center; animation:fadeUp 1.2s 0.8s ease-out both; opacity:0; }
+  .btn-primary { display:inline-block; padding:14px 42px; border:1px solid var(--sand); color:var(--parchment); font-family:'Crimson Pro',serif; font-size:16px; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; background:transparent; transition:all 0.4s; position:relative; overflow:hidden; }
+  .btn-primary::before { content:''; position:absolute; inset:0; background:var(--sand); transform:scaleX(0); transform-origin:left; transition:transform 0.4s; z-index:-1; }
+  .btn-primary:hover { color:var(--ink); }
+  .btn-primary:hover::before { transform:scaleX(1); }
+  .tagline-small { margin-top:12px; font-size:13px; color:rgba(232,228,217,0.4); letter-spacing:0.05em; }
+
+  /* APP SHELL */
+  .app-shell { min-height:100vh; background:linear-gradient(180deg,#0a0e1a 0%,#0d1b2a 100%); padding-bottom:80px; }
+  .app-header { padding:20px 24px 0; display:flex; align-items:center; justify-content:space-between; }
+  .app-logo { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; letter-spacing:0.15em; }
+  .avatar-wrap { display:flex; align-items:center; gap:10px; }
+  .avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,#0f3460,#c4972f); border:1px solid var(--sand); position:relative; overflow:hidden; cursor:pointer; }
+  .avatar::before { content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:10px; height:20px; background:rgba(232,228,217,0.6); clip-path:polygon(20% 100%,80% 100%,65% 0%,35% 0%); }
+  .avatar::after { content:''; position:absolute; top:6px; left:50%; transform:translateX(-50%); width:14px; height:8px; background:rgba(196,151,47,0.8); border-radius:2px 2px 0 0; }
+  .username { font-size:13px; color:var(--sand); letter-spacing:0.05em; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:11px; letter-spacing:0.25em; text-transform:uppercase; color:var(--sand); opacity:0.7; padding:28px 24px 12px; }
+  .letter-card { margin:0 20px 12px; border:1px solid rgba(201,185,154,0.15); border-radius:2px; background:rgba(255,255,255,0.03); padding:20px; cursor:pointer; transition:all 0.3s; position:relative; overflow:hidden; }
+  .letter-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--gold); opacity:0; transition:opacity 0.3s; }
+  .letter-card:hover { background:rgba(255,255,255,0.05); border-color:rgba(201,185,154,0.3); }
+  .letter-card:hover::before, .letter-card.letter-unread::before { opacity:1; }
+  .letter-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .letter-from { font-size:12px; letter-spacing:0.08em; color:var(--sand); font-style:italic; }
+  .letter-date { font-size:11px; color:rgba(232,228,217,0.3); letter-spacing:0.05em; }
+  .letter-preview { font-size:15px; line-height:1.7; color:rgba(232,228,217,0.8); font-style:italic; }
+  .unread-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; display:inline-block; margin-left:6px; animation:glow 2s infinite; }
+  @keyframes glow { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+  .write-zone { margin:8px 20px 20px; border:1px dashed rgba(201,185,154,0.2); border-radius:2px; padding:20px; text-align:center; cursor:pointer; transition:all 0.3s; }
+  .write-zone:hover { border-color:rgba(201,185,154,0.4); background:rgba(255,255,255,0.02); }
+  .write-icon { font-size:28px; margin-bottom:8px; opacity:0.5; }
+  .write-label { font-size:14px; color:var(--sand); letter-spacing:0.1em; font-style:italic; }
+  .tab-bar { position:fixed; bottom:0; left:0; right:0; background:rgba(10,14,26,0.95); border-top:1px solid rgba(201,185,154,0.1); display:flex; padding:12px 0 16px; backdrop-filter:blur(10px); }
+  .tab-item { flex:1; text-align:center; cursor:pointer; opacity:0.4; transition:opacity 0.2s; font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--foam); padding-top:2px; }
+  .tab-item.active { opacity:1; color:var(--sand); }
+  .tab-icon { font-size:20px; display:block; margin-bottom:3px; }
+  .divider { height:1px; background:rgba(201,185,154,0.06); margin:0 20px; }
+
+  /* WRITE */
+  .write-screen { min-height:100vh; background:linear-gradient(160deg,#0f1f35 0%,#0a0e1a 100%); padding-bottom:100px; }
+  .write-header { padding:20px 24px; display:flex; align-items:center; gap:16px; border-bottom:1px solid rgba(201,185,154,0.08); }
+  .back-btn { font-size:20px; cursor:pointer; opacity:0.5; background:none; border:none; color:var(--foam); padding:4px; transition:opacity 0.2s; }
+  .back-btn:hover { opacity:1; }
+  .write-header-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; letter-spacing:0.1em; font-style:italic; }
+  .paper-area { margin:24px 20px; background:var(--parchment); border-radius:1px; padding:32px 28px; min-height:340px; position:relative; box-shadow:0 4px 30px rgba(0,0,0,0.4); }
+  .paper-area::before { content:''; position:absolute; inset:32px 28px; background:repeating-linear-gradient(transparent,transparent 27px,rgba(201,185,154,0.3) 27px,rgba(201,185,154,0.3) 28px); pointer-events:none; }
+  .letter-textarea { width:100%; min-height:280px; background:transparent; border:none; outline:none; font-family:'Crimson Pro',serif; font-size:17px; line-height:28px; color:var(--ink); resize:none; position:relative; z-index:1; }
+  .letter-textarea::placeholder { color:rgba(26,26,46,0.3); font-style:italic; }
+  .drawing-strip { margin:0 20px; border:1px solid rgba(201,185,154,0.15); border-top:none; padding:14px 18px; display:flex; align-items:center; gap:12px; }
+  .draw-btn { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; background:none; border:1px solid rgba(201,185,154,0.2); color:var(--sand); padding:7px 16px; border-radius:24px; font-family:'Crimson Pro',serif; letter-spacing:0.05em; transition:all 0.3s; }
+  .draw-btn:hover { border-color:var(--sand); background:rgba(201,185,154,0.08); }
+  .send-area { margin:20px; display:flex; flex-direction:column; gap:12px; }
+  .send-note { font-size:12px; color:rgba(232,228,217,0.3); text-align:center; letter-spacing:0.05em; font-style:italic; }
+  .send-note span { color:var(--sand); opacity:0.7; }
+  .btn-send { width:100%; padding:16px; background:linear-gradient(135deg,rgba(196,151,47,0.15),rgba(196,151,47,0.05)); border:1px solid rgba(196,151,47,0.4); color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; letter-spacing:0.2em; cursor:pointer; transition:all 0.4s; display:flex; align-items:center; justify-content:center; gap:10px; }
+  .btn-send:hover { background:linear-gradient(135deg,rgba(196,151,47,0.25),rgba(196,151,47,0.1)); border-color:var(--gold); }
+
+  /* READ */
+  .read-screen { min-height:100vh; background:linear-gradient(160deg,#0f1f35 0%,#0a0e1a 100%); padding-bottom:100px; }
+  .read-header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(201,185,154,0.08); }
+  .report-btn { font-size:12px; cursor:pointer; letter-spacing:0.05em; background:none; border:none; color:rgba(232,228,217,0.3); font-family:'Crimson Pro',serif; transition:color 0.2s; }
+  .report-btn:hover { color:rgba(232,228,217,0.7); }
+  .translation-bar { margin:16px 20px 0; padding:10px 16px; background:rgba(196,151,47,0.07); border:1px solid rgba(196,151,47,0.2); border-radius:2px; font-size:12px; color:rgba(196,151,47,0.8); letter-spacing:0.05em; display:flex; align-items:center; gap:8px; }
+  .letter-paper { margin:16px 20px; background:var(--parchment); padding:32px 28px; box-shadow:0 4px 30px rgba(0,0,0,0.4); position:relative; }
+  .letter-paper::before { content:''; position:absolute; inset:32px 28px; background:repeating-linear-gradient(transparent,transparent 27px,rgba(201,185,154,0.3) 27px,rgba(201,185,154,0.3) 28px); pointer-events:none; }
+  .letter-text { font-family:'Crimson Pro',serif; font-size:17px; line-height:28px; color:var(--ink); font-style:italic; position:relative; z-index:1; }
+  .letter-sketch { margin-top:20px; border-top:1px solid rgba(201,185,154,0.4); padding-top:16px; text-align:center; }
+  .sketch-placeholder { width:100%; height:100px; background:repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(201,185,154,0.15) 4px,rgba(201,185,154,0.15) 5px); border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:13px; color:rgba(26,26,46,0.3); font-style:italic; }
+  .from-tag { font-size:12px; color:rgba(26,26,46,0.4); text-align:right; margin-top:20px; font-style:italic; position:relative; z-index:1; }
+  .letter-actions { margin:0 20px; display:flex; flex-direction:column; gap:10px; }
+  .btn-reply { width:100%; padding:15px; background:transparent; border:1px solid rgba(196,151,47,0.4); color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; letter-spacing:0.15em; cursor:pointer; transition:all 0.3s; }
+  .btn-reply:hover { background:rgba(196,151,47,0.08); }
+  .btn-release { width:100%; padding:12px; background:transparent; border:1px solid rgba(201,185,154,0.1); color:rgba(232,228,217,0.3); font-family:'Crimson Pro',serif; font-size:14px; letter-spacing:0.1em; font-style:italic; cursor:pointer; transition:all 0.3s; }
+  .btn-release:hover { border-color:rgba(201,185,154,0.2); color:rgba(232,228,217,0.5); }
+
+  /* CHAT */
+  .chat-screen { min-height:100vh; background:linear-gradient(180deg,#0a0e1a 0%,#0d1b2a 100%); display:flex; flex-direction:column; }
+  .chat-header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(201,185,154,0.08); position:sticky; top:0; background:rgba(10,14,26,0.9); backdrop-filter:blur(8px); z-index:10; }
+  .chat-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,#16213e,#0f3460); border:1px solid rgba(201,185,154,0.3); position:relative; overflow:hidden; }
+  .chat-avatar::before { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:8px; height:16px; background:rgba(232,228,217,0.5); clip-path:polygon(20% 100%,80% 100%,65% 0%,35% 0%); }
+  .chat-avatar::after { content:''; position:absolute; top:4px; left:50%; transform:translateX(-50%); width:11px; height:6px; background:rgba(196,151,47,0.6); border-radius:2px 2px 0 0; }
+  .chat-username { font-size:14px; letter-spacing:0.05em; color:var(--foam); }
+  .chat-sub { font-size:11px; color:var(--sand); opacity:0.6; font-style:italic; }
+  .chat-delete-btn { font-size:12px; cursor:pointer; background:none; border:none; color:rgba(232,228,217,0.25); font-family:'Crimson Pro',serif; letter-spacing:0.05em; transition:color 0.2s; }
+  .chat-delete-btn:hover { color:rgba(220,100,100,0.6); }
+  .chat-messages { flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; min-height:400px; }
+  .msg { max-width:78%; }
+  .msg.them { align-self:flex-start; }
+  .msg.me { align-self:flex-end; }
+  .msg-bubble { padding:12px 16px; font-size:15px; line-height:1.6; font-style:italic; border-radius:2px; }
+  .msg.them .msg-bubble { background:rgba(15,52,96,0.5); border:1px solid rgba(201,185,154,0.1); color:rgba(232,228,217,0.85); }
+  .msg.me .msg-bubble { background:rgba(196,151,47,0.12); border:1px solid rgba(196,151,47,0.2); color:rgba(232,228,217,0.9); }
+  .msg-time { font-size:10px; color:rgba(232,228,217,0.2); margin-top:4px; letter-spacing:0.05em; padding:0 4px; }
+  .msg.me .msg-time { text-align:right; }
+  .translation-note { font-size:11px; color:rgba(196,151,47,0.5); font-style:italic; margin-top:3px; padding-left:2px; }
+  .contact-exchange-bar { margin:0 16px 12px; padding:10px 16px; background:rgba(196,151,47,0.06); border:1px solid rgba(196,151,47,0.15); border-radius:2px; font-size:12px; color:rgba(196,151,47,0.6); text-align:center; cursor:pointer; transition:all 0.3s; letter-spacing:0.05em; font-style:italic; }
+  .contact-exchange-bar:hover { background:rgba(196,151,47,0.1); color:rgba(196,151,47,0.9); }
+  .chat-input-area { padding:12px 16px 20px; border-top:1px solid rgba(201,185,154,0.08); background:rgba(10,14,26,0.9); backdrop-filter:blur(8px); display:flex; gap:10px; align-items:flex-end; }
+  .chat-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(201,185,154,0.15); border-radius:2px; padding:12px 14px; color:var(--foam); font-family:'Crimson Pro',serif; font-size:15px; font-style:italic; outline:none; resize:none; min-height:44px; max-height:100px; }
+  .chat-input::placeholder { color:rgba(232,228,217,0.2); }
+  .chat-input:focus { border-color:rgba(201,185,154,0.3); }
+  .send-msg-btn { width:44px; height:44px; background:rgba(196,151,47,0.15); border:1px solid rgba(196,151,47,0.3); border-radius:50%; color:var(--gold); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all 0.3s; }
+  .send-msg-btn:hover { background:rgba(196,151,47,0.25); }
+
+  /* PROFILE */
+  .profile-screen { min-height:100vh; background:linear-gradient(180deg,#0a0e1a 0%,#0d1b2a 100%); padding-bottom:100px; }
+  .profile-header { padding:20px 24px; text-align:center; border-bottom:1px solid rgba(201,185,154,0.08); }
+  .profile-avatar-large { width:80px; height:80px; border-radius:50%; margin:0 auto 16px; background:radial-gradient(circle at 35% 35%,#1a4060,#0d1b2a); border:1px solid rgba(201,185,154,0.3); position:relative; overflow:hidden; }
+  .profile-avatar-large::before { content:''; position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:18px; height:36px; background:rgba(232,228,217,0.5); clip-path:polygon(20% 100%,80% 100%,65% 0%,35% 0%); }
+  .profile-avatar-large::after { content:''; position:absolute; top:10px; left:50%; transform:translateX(-50%); width:26px; height:14px; background:rgba(196,151,47,0.7); border-radius:4px 4px 0 0; box-shadow:0 0 20px rgba(196,151,47,0.5); }
+  .profile-name { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; letter-spacing:0.12em; color:var(--foam); margin-bottom:4px; }
+  .profile-joined { font-size:12px; color:var(--sand); opacity:0.5; font-style:italic; }
+  .stats-row { display:flex; margin:0 20px; border:1px solid rgba(201,185,154,0.1); border-radius:2px; margin-top:24px; overflow:hidden; }
+  .stat-block { flex:1; text-align:center; padding:20px 10px; border-right:1px solid rgba(201,185,154,0.1); }
+  .stat-block:last-child { border-right:none; }
+  .stat-num { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--gold); line-height:1; margin-bottom:6px; }
+  .stat-label { font-size:11px; color:rgba(232,228,217,0.35); letter-spacing:0.08em; text-transform:uppercase; }
+  .lighthouse-beacon { margin:32px 20px 0; text-align:center; }
+  .beacon-label { font-size:12px; color:var(--sand); opacity:0.5; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px; }
+  .lighthouse-svg-wrap { display:inline-block; position:relative; }
+  .beam { position:absolute; top:20px; left:50%; width:120px; height:2px; background:linear-gradient(90deg,rgba(196,151,47,0.8),transparent); transform-origin:left center; animation:sweep 4s ease-in-out infinite; }
+  @keyframes sweep { 0%{transform:rotate(-60deg);opacity:1} 50%{transform:rotate(60deg);opacity:0.8} 100%{transform:rotate(-60deg);opacity:1} }
+  .beacon-intensity { font-size:13px; color:var(--gold); margin-top:12px; font-style:italic; opacity:0.8; }
+  .notif-card { margin:24px 20px 0; padding:20px; background:rgba(196,151,47,0.06); border:1px solid rgba(196,151,47,0.2); border-radius:2px; display:flex; gap:14px; align-items:flex-start; }
+  .notif-icon { font-size:24px; }
+  .notif-text { font-size:14px; line-height:1.6; color:rgba(232,228,217,0.7); font-style:italic; }
+  .notif-text strong { color:var(--gold); font-style:normal; }
+
+  /* CANVAS */
+  .canvas-modal { display:none; position:fixed; inset:0; background:rgba(10,14,26,0.95); z-index:100; flex-direction:column; align-items:center; justify-content:center; backdrop-filter:blur(4px); }
+  .canvas-modal.open { display:flex; }
+  .canvas-wrap { background:var(--parchment); border-radius:2px; padding:16px; box-shadow:0 0 60px rgba(0,0,0,0.5); }
+  #drawCanvas { cursor:crosshair; display:block; border-radius:1px; }
+  .canvas-tools { display:flex; gap:10px; margin-top:12px; justify-content:center; flex-wrap:wrap; }
+  .color-dot { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s; }
+  .color-dot.selected { border-color:var(--foam); }
+  .canvas-btn { padding:6px 16px; background:none; border:1px solid rgba(26,26,46,0.3); color:var(--ink); font-family:'Crimson Pro',serif; font-size:14px; cursor:pointer; border-radius:20px; transition:all 0.2s; }
+  .canvas-btn:hover { background:rgba(26,26,46,0.1); }
+  .canvas-btn.done { background:var(--ink); color:var(--parchment); }
+  .screen-label { text-align:center; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(201,185,154,0.25); padding:10px; border-bottom:1px solid rgba(201,185,154,0.06); }
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-thumb { background:rgba(201,185,154,0.2); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="active" onclick="show('splash')">Splash</button>
+  <button onclick="show('home')">Home</button>
+  <button onclick="show('write')">Write Letter</button>
+  <button onclick="show('read')">Read Letter</button>
+  <button onclick="show('chat')">Chat</button>
+  <button onclick="show('profile')">Profile</button>
+</div>
+
+<!-- SPLASH -->
+<div id="splash" class="screen active">
+  <div class="splash">
+    <div class="ocean-bg"></div>
+    <div class="stars" id="starsEl"></div>
+    <div class="waves-container">
+      <div class="wave wave-1"></div>
+      <div class="wave wave-2"></div>
+      <div class="wave wave-3"></div>
+    </div>
+    <div class="bottle-container">
+      <div class="bottle">
+        <svg viewBox="0 0 52 120" fill="none">
+          <path d="M18 35 C14 40 11 50 11 65 L11 95 C11 103 16 108 26 108 C36 108 41 103 41 95 L41 65 C41 50 38 40 34 35 Z" fill="rgba(130,180,210,0.25)" stroke="rgba(180,220,240,0.6)" stroke-width="1.5"/>
+          <path d="M21 18 L21 35 L31 35 L31 18 Z" fill="rgba(130,180,210,0.2)" stroke="rgba(180,220,240,0.5)" stroke-width="1"/>
+          <rect x="20" y="12" width="12" height="8" rx="1" fill="rgba(180,140,90,0.7)" stroke="rgba(200,160,110,0.5)" stroke-width="1"/>
+          <rect x="17" y="50" width="18" height="23" rx="1" fill="rgba(245,240,232,0.15)" stroke="rgba(245,240,232,0.2)" stroke-width="0.5"/>
+          <line x1="19" y1="56" x2="33" y2="56" stroke="rgba(245,240,232,0.3)" stroke-width="0.5"/>
+          <line x1="19" y1="60" x2="33" y2="60" stroke="rgba(245,240,232,0.3)" stroke-width="0.5"/>
+          <line x1="19" y1="64" x2="29" y2="64" stroke="rgba(245,240,232,0.3)" stroke-width="0.5"/>
+          <path d="M15 50 C14 55 13 65 14 75" stroke="rgba(255,255,255,0.15)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M11 75 Q26 70 41 75" stroke="rgba(100,160,200,0.3)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+    </div>
+    <div class="splash-content">
+      <div class="splash-title">harbor</div>
+      <div class="splash-subtitle">letters that find their way</div>
+    </div>
+    <div class="splash-cta">
+      <button class="btn-primary" onclick="show('home')">Begin</button>
+      <div class="tagline-small">anonymous · borderless · between people</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div class="app-shell">
+    <div class="screen-label">Home — Inbox</div>
+    <div class="app-header">
+      <div class="app-logo">harbor</div>
+      <div class="avatar-wrap">
+        <div class="username">Misty Shore</div>
+        <div class="avatar" onclick="show('profile')"></div>
+      </div>
+    </div>
+    <div class="section-title">Your words</div>
+    <div class="write-zone" onclick="show('write')">
+      <div class="write-icon">✉</div>
+      <div class="write-label">Write a letter to the ocean...</div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-title">Arrived for you <span class="unread-dot"></span></div>
+    <div class="letter-card letter-unread" onclick="show('read')">
+      <div class="letter-meta"><span class="letter-from">from Northern Flame</span><span class="letter-date">today</span></div>
+      <div class="letter-preview">"I don't know who you are. But today I felt like writing to someone who doesn't know me at all..."</div>
+    </div>
+    <div class="letter-card" onclick="show('read')">
+      <div class="letter-meta"><span class="letter-from">from Lunar Tide</span><span class="letter-date">yesterday</span></div>
+      <div class="letter-preview">"Autumn feels particularly long this year. I watch the trees and wonder how they are not afraid..."</div>
+    </div>
+    <div class="letter-card" onclick="show('read')">
+      <div class="letter-meta"><span class="letter-from">from Blue Cove</span><span class="letter-date">3 days ago</span></div>
+      <div class="letter-preview">"I painted for the first time in three years today. Clumsy and funny, but it felt good."</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item active"><span class="tab-icon">⚓</span>Letters</div>
+      <div class="tab-item" onclick="show('chat')"><span class="tab-icon">🔦</span>Chats</div>
+      <div class="tab-item" onclick="show('profile')"><span class="tab-icon">🏮</span>Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- WRITE -->
+<div id="write" class="screen">
+  <div class="write-screen">
+    <div class="screen-label">Write a Letter</div>
+    <div class="write-header">
+      <button class="back-btn" onclick="show('home')">←</button>
+      <div class="write-header-title">A letter to the ocean</div>
+    </div>
+    <div class="section-title">Your words</div>
+    <div class="paper-area">
+      <textarea class="letter-textarea" placeholder="Write whatever you wish. This letter will find the one who needs it..."></textarea>
+    </div>
+    <div class="drawing-strip">
+      <button class="draw-btn" onclick="openCanvas()"><span>✏</span> Add a sketch</button>
+      <span style="font-size:12px;color:rgba(232,228,217,0.25);font-style:italic;">optional</span>
+    </div>
+    <div class="send-area">
+      <div class="send-note">Your letter will be <span>reviewed</span> and drift to a stranger.<br>You will never know who receives it.</div>
+      <button class="btn-send"><span>⟿</span> Send to sea</button>
+    </div>
+  </div>
+</div>
+
+<!-- READ -->
+<div id="read" class="screen">
+  <div class="read-screen">
+    <div class="screen-label">Incoming Letter</div>
+    <div class="read-header">
+      <button class="back-btn" onclick="show('home')" style="background:none;border:none;color:var(--foam);font-size:20px;cursor:pointer;opacity:0.5;">←</button>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;font-style:italic;">from Northern Flame</div>
+      <button class="report-btn">⚑ Report</button>
+    </div>
+    <div class="translation-bar">🌐 Auto-translated from Italian</div>
+    <div class="letter-paper">
+      <div class="letter-text">
+        I don't know who you are. But today I felt like writing to someone who doesn't know me at all — no history, no expectations.<br><br>
+        I live by the sea. Every morning I step out onto the balcony and listen to it breathe. Sometimes I feel like it knows something I don't. Something important.<br><br>
+        Do you ever just listen to something, with no particular reason?
+      </div>
+      <div class="letter-sketch">
+        <div class="sketch-placeholder">✏ a pencil sketch of a wave</div>
+      </div>
+      <div class="from-tag">— Northern Flame, Italy</div>
+    </div>
+    <div class="letter-actions">
+      <button class="btn-reply" onclick="show('chat')">Reply → start a conversation</button>
+      <button class="btn-release">Release this letter</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="screen">
+  <div class="chat-screen">
+    <div class="screen-label">Anonymous Chat</div>
+    <div class="chat-header">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="back-btn" onclick="show('home')" style="background:none;border:none;color:var(--foam);font-size:20px;cursor:pointer;opacity:0.5;">←</button>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="chat-avatar"></div>
+          <div>
+            <div class="chat-username">Northern Flame</div>
+            <div class="chat-sub">online · Italy</div>
+          </div>
+        </div>
+      </div>
+      <button class="chat-delete-btn">Delete chat</button>
+    </div>
+    <div class="chat-messages">
+      <div style="text-align:center;font-size:12px;color:rgba(232,228,217,0.2);font-style:italic;margin-bottom:8px;letter-spacing:0.05em;">Conversation started — letter from Feb 28</div>
+      <div class="msg them">
+        <div class="msg-bubble">You actually replied. I honestly didn't expect that.</div>
+        <div class="translation-note">🌐 translated from Italian</div>
+        <div class="msg-time">14:23</div>
+      </div>
+      <div class="msg me">
+        <div class="msg-bubble">Your letter about the sea — I read it twice. There's no sea near my city, only rivers. But I understood what you meant.</div>
+        <div class="msg-time">14:27</div>
+      </div>
+      <div class="msg them">
+        <div class="msg-bubble">Rivers breathe too. In their own way.</div>
+        <div class="translation-note">🌐 translated from Italian</div>
+        <div class="msg-time">14:31</div>
+      </div>
+      <div class="msg me">
+        <div class="msg-bubble">Yes. You're right. I hadn't thought of it like that.</div>
+        <div class="msg-time">14:33</div>
+      </div>
+    </div>
+    <div class="contact-exchange-bar">⚓ Exchange contacts to meet in real life</div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" placeholder="Write something..." rows="1"></textarea>
+      <button class="send-msg-btn">→</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile" class="screen">
+  <div class="profile-screen">
+    <div class="screen-label">Profile</div>
+    <div class="app-header" style="justify-content:flex-end;padding-bottom:12px;">
+      <button class="back-btn" onclick="show('home')" style="background:none;border:none;color:var(--foam);font-size:20px;cursor:pointer;opacity:0.5;">←</button>
+    </div>
+    <div class="profile-header">
+      <div class="profile-avatar-large"></div>
+      <div class="profile-name">Misty Shore</div>
+      <div class="profile-joined">with you since January 2026</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-block"><div class="stat-num">14</div><div class="stat-label">Sent</div></div>
+      <div class="stat-block"><div class="stat-num">19</div><div class="stat-label">Received</div></div>
+      <div class="stat-block"><div class="stat-num">6</div><div class="stat-label">Replied</div></div>
+    </div>
+    <div class="lighthouse-beacon">
+      <div class="beacon-label">Your Lighthouse</div>
+      <div class="lighthouse-svg-wrap">
+        <svg width="60" height="90" viewBox="0 0 60 90" fill="none">
+          <rect x="15" y="78" width="30" height="8" rx="2" fill="rgba(201,185,154,0.3)"/>
+          <path d="M24 35 L22 78 L38 78 L36 35 Z" fill="rgba(232,228,217,0.15)" stroke="rgba(232,228,217,0.3)" stroke-width="1"/>
+          <path d="M22.5 52 L37.5 52 L37 58 L23 58 Z" fill="rgba(196,151,47,0.2)"/>
+          <path d="M23.5 66 L36.5 66 L36 72 L24 72 Z" fill="rgba(196,151,47,0.2)"/>
+          <rect x="20" y="25" width="20" height="12" rx="2" fill="rgba(196,151,47,0.3)" stroke="rgba(196,151,47,0.5)" stroke-width="1"/>
+          <circle cx="30" cy="31" r="5" fill="rgba(196,151,47,0.8)"/>
+          <circle cx="30" cy="31" r="8" fill="rgba(196,151,47,0.2)"/>
+          <path d="M22 25 L30 14 L38 25 Z" fill="rgba(232,228,217,0.2)" stroke="rgba(232,228,217,0.3)" stroke-width="1"/>
+        </svg>
+        <div class="beam"></div>
+      </div>
+      <div class="beacon-intensity">brightness: active</div>
+    </div>
+    <div class="notif-card">
+      <div class="notif-icon">🔦</div>
+      <div class="notif-text"><strong>Someone is waiting for your light.</strong><br>You haven't visited in 3 days. Your lighthouse is beginning to fade.</div>
+    </div>
+    <div class="tab-bar">
+      <div class="tab-item" onclick="show('home')"><span class="tab-icon">⚓</span>Letters</div>
+      <div class="tab-item" onclick="show('chat')"><span class="tab-icon">🔦</span>Chats</div>
+      <div class="tab-item active"><span class="tab-icon">🏮</span>Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div class="canvas-modal" id="canvasModal">
+  <div class="canvas-wrap">
+    <canvas id="drawCanvas" width="300" height="200" style="background:#f5f0e8;border-radius:1px;"></canvas>
+    <div class="canvas-tools">
+      <div class="color-dot selected" style="background:#1a1a2e;" data-color="#1a1a2e" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#5a3e2b;" data-color="#5a3e2b" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#0f3460;" data-color="#0f3460" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#c4972f;" data-color="#c4972f" onclick="setColor(this)"></div>
+      <div class="color-dot" style="background:#c9b99a;" data-color="#c9b99a" onclick="setColor(this)"></div>
+      <button class="canvas-btn" onclick="clearCanvas()">Clear</button>
+      <button class="canvas-btn done" onclick="closeCanvas()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const map = ['splash','home','write','read','chat','profile'];
+    document.querySelectorAll('.nav button').forEach((b,i) => b.classList.toggle('active', map[i]===id));
+    window.scrollTo(0,0);
+  }
+  const starsEl = document.getElementById('starsEl');
+  for (let i=0;i<80;i++) {
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*55}%;--d:${2+Math.random()*4}s;--o:${0.2+Math.random()*0.6};animation-delay:${Math.random()*4}s;`;
+    starsEl.appendChild(s);
+  }
+  let drawing=false,ctx,color='#1a1a2e';
+  function openCanvas() {
+    document.getElementById('canvasModal').classList.add('open');
+    const c=document.getElementById('drawCanvas');
+    ctx=c.getContext('2d'); ctx.lineWidth=2; ctx.lineCap='round'; ctx.strokeStyle=color;
+    c.onmousedown=e=>{drawing=true;ctx.beginPath();ctx.moveTo(...pos(e,c));};
+    c.onmousemove=e=>{if(!drawing)return;ctx.strokeStyle=color;ctx.lineTo(...pos(e,c));ctx.stroke();};
+    c.onmouseup=c.onmouseleave=()=>drawing=false;
+    c.ontouchstart=e=>{e.preventDefault();drawing=true;ctx.beginPath();ctx.moveTo(...posT(e,c));};
+    c.ontouchmove=e=>{e.preventDefault();if(!drawing)return;ctx.strokeStyle=color;ctx.lineTo(...posT(e,c));ctx.stroke();};
+    c.ontouchend=()=>drawing=false;
+  }
+  function pos(e,c){const r=c.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top];}
+  function posT(e,c){const r=c.getBoundingClientRect();return[e.touches[0].clientX-r.left,e.touches[0].clientY-r.top];}
+  function setColor(el){document.querySelectorAll('.color-dot').forEach(d=>d.classList.remove('selected'));el.classList.add('selected');color=el.dataset.color;}
+  function clearCanvas(){if(ctx)ctx.clearRect(0,0,300,200);}
+  function closeCanvas(){document.getElementById('canvasModal').classList.remove('open');}
+</script>
+</body>
+</html>
