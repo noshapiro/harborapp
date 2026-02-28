@@ -7,6 +7,7 @@ import { getAvatarHtml } from '../components/AvatarImage.js';
 import { getAvatarUrl } from '../lighthouse-avatars.js';
 import { getTabIcon } from '../components/TabIcons.js';
 import { getQuillIconSvg } from '../components/QuillIcon.js';
+import { IconEnvelope, IconGlobe, IconStar } from '../components/EmojiIcons.js';
 
 /** Avatar for letter sender (Northern Flame etc.) — random lighthouse from folder */
 function senderAvatarHtml(letter, size = 'banner') {
@@ -25,8 +26,8 @@ function formatSentDate(d) {
 }
 
 function sentStatusBadge(entry) {
-  if (entry.status === 'conversation') return '💬 In conversation';
-  if (entry.status === 'delivered') return '✦ Delivered';
+  if (entry.status === 'conversation') return `${IconStar(12)} In conversation`;
+  if (entry.status === 'delivered') return `${IconStar(12)} Delivered`;
   const dateStr = formatSentDate(entry.deliverAt);
   return `⏳ In transit — arrives ${dateStr}`;
 }
@@ -83,7 +84,7 @@ export function renderHome(state) {
       </div>
       <div class="banner-preview">${escapeHtml(hero.preview)}</div>
       <div class="banner-meta">
-        <div class="banner-from">${senderAvatarHtml(hero, 'banner')}— ${escapeHtml(hero.from)} · 🌐 from ${hero.translatedFrom || 'unknown'}</div>
+        <div class="banner-from">${senderAvatarHtml(hero, 'banner')}— ${escapeHtml(hero.from)} · ${IconGlobe(12)} from ${hero.translatedFrom || 'unknown'}</div>
         <div class="banner-arrow">›</div>
       </div>
     `;
@@ -114,7 +115,7 @@ export function renderHome(state) {
   const sendBtn = document.createElement('button');
   sendBtn.type = 'button';
   sendBtn.className = 'send-another-btn';
-  sendBtn.textContent = '📬 Send me another letter';
+  sendBtn.innerHTML = `${IconEnvelope(18)} Send me another letter`;
   sendBtn.addEventListener('click', () => window.harborNavigate('write'));
   inboxPanel.appendChild(sendBtn);
 
@@ -160,7 +161,7 @@ export function renderHome(state) {
           : 'sent-badge pending';
     card.innerHTML = `
       <div class="sent-top">
-        <span class="${badgeClass}">${escapeHtml(sentStatusBadge(entry))}</span>
+        <span class="${badgeClass}">${sentStatusBadge(entry)}</span>
         <span class="sent-date">${escapeHtml(formatSentDate(entry.deliverAt))}</span>
       </div>
       <div class="sent-preview">${escapeHtml(String(entry.preview).slice(0, 80))}${entry.preview.length > 80 ? '…' : ''}</div>

@@ -4,6 +4,7 @@
 
 import { openCanvasModal, closeCanvasModal } from '../components/CanvasModal.js';
 import { triggerSendAnim } from '../send-anim.js';
+import { IconPencil, IconClock } from '../components/EmojiIcons.js';
 
 const DELAYS = [
   { value: 0, label: 'Now', seconds: 0 },
@@ -27,8 +28,8 @@ function escapeHtml(s) {
 
 export function renderWrite() {
   let selectedDelay = 0;
-  let selectedDest = 'sea';
-  let selectedRegion = '';
+  const selectedDest = 'sea';
+  const selectedRegion = '';
 
   const wrap = document.createElement('div');
   wrap.className = 'screen active';
@@ -46,43 +47,19 @@ export function renderWrite() {
       <button type="button" class="back-btn" id="write-back">←</button>
       <div class="write-title">A letter to the ocean</div>
     </div>
-    <div class="write-scroll-content">
-      <div class="write-content-inner">
-        <div class="paper-wrap">
-          <div class="paper-top"></div>
-          <div class="paper-inner">
-            <textarea class="letter-textarea" id="letterText" placeholder="Write whatever you wish. This letter will find the one who needs it..."></textarea>
-          </div>
-          <div class="paper-footer">
-            <span class="char-count" id="charCount">0 characters</span>
-            <button type="button" class="draw-pill" id="draw-pill">✏ Add sketch</button>
-          </div>
+    <div class="write-paper-zone">
+      <div class="paper-wrap">
+        <div class="paper-top"></div>
+        <div class="paper-inner">
+          <textarea class="letter-textarea" id="letterText" placeholder="Write whatever you wish. This letter will find the one who needs it..."></textarea>
+        </div>
+        <div class="paper-footer">
+          <span class="char-count" id="charCount">0 characters</span>
+          <button type="button" class="draw-pill" id="draw-pill">${IconPencil(14)} Add sketch</button>
         </div>
       </div>
-      <div class="write-options-block">
-        <div class="write-opt-label">send towards</div>
-        <div class="dest-options" id="destOptions">
-          <div class="dest-opt active" data-dest="sea">
-            <div class="dest-icon">🌊</div>
-            <div class="dest-name">Open sea</div>
-            <div class="dest-sub">anywhere</div>
-          </div>
-          <div class="dest-opt" data-dest="shore">
-            <div class="dest-icon">🏝</div>
-            <div class="dest-name">A shore</div>
-            <div class="dest-sub">choose region</div>
-          </div>
-        </div>
-        <div class="region-picker" id="regionPicker" style="display:none;">
-          <select class="region-select" id="regionSelect">
-            <option value="">Select a region…</option>
-            <option value="Northern Europe">Northern Europe</option>
-            <option value="Mediterranean">Mediterranean</option>
-            <option value="East Asia">East Asia</option>
-            <option value="South America">South America</option>
-          </select>
-        </div>
-      </div>
+    </div>
+    <div class="write-bottom-zone">
       <div class="time-capsule-section">
         <div class="time-capsule-label">when should it arrive?</div>
         <div class="time-capsule-pills">
@@ -92,17 +69,15 @@ export function renderWrite() {
           Your letter will drift silently and arrive on <span id="hintDate"></span>.
         </div>
       </div>
-      <div class="write-footer">
-        <div class="depth-nudge" id="depthNudge"></div>
-        <div class="send-note">
-          Your letter will be <em>reviewed</em> and drift to a stranger.<br>
-          You will never know who receives it.
-        </div>
-        <button type="button" class="btn-send" id="btn-send">
-          <span class="send-btn-label send-label-instant">⟿ Send to sea</span>
-          <span class="send-btn-label send-label-seal">🕰 Seal & send</span>
-        </button>
+      <div class="depth-nudge" id="depthNudge"></div>
+      <div class="send-note">
+        Your letter will be <em>reviewed</em> and drift to a stranger.<br>
+        You will never know who receives it.
       </div>
+      <button type="button" class="btn-send" id="btn-send">
+        <span class="send-btn-label send-label-instant">⟿ Send to sea</span>
+        <span class="send-btn-label send-label-seal">${IconClock(14)} Seal & send</span>
+      </button>
     </div>
   `;
 
@@ -165,18 +140,6 @@ export function renderWrite() {
 
   updateHintAndButton();
 
-  const regionPicker = screen.querySelector('#regionPicker');
-  const regionSelect = screen.querySelector('#regionSelect');
-  screen.querySelectorAll('.dest-opt').forEach((opt) => {
-    opt.addEventListener('click', () => {
-      selectedDest = opt.dataset.dest;
-      screen.querySelectorAll('.dest-opt').forEach((o) => o.classList.remove('active'));
-      opt.classList.add('active');
-      if (regionPicker) regionPicker.style.display = selectedDest === 'shore' ? 'block' : 'none';
-    });
-  });
-  if (regionSelect) regionSelect.addEventListener('change', () => { selectedRegion = regionSelect.value || ''; });
-
   screen.querySelector('#btn-send').addEventListener('click', () => {
     const txt = textarea.value.trim();
     if (!txt) {
@@ -185,7 +148,7 @@ export function renderWrite() {
     }
     const deliverAt = selectedDelay > 0 ? new Date(Date.now() + selectedDelay * 1000) : null;
     const preview = txt.slice(0, 100);
-    const region = selectedDest === 'shore' ? (regionSelect?.value || selectedRegion || 'a distant shore') : null;
+    const region = null;
     triggerSendAnim(selectedDelay, deliverAt, preview, { dest: selectedDest, region });
   });
 

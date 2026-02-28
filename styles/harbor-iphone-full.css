@@ -908,16 +908,30 @@
   to { transform: scale(1); }
 }
 
-/* Tab bar */
+/* Inline icons (replacing emojis) — gold/sand to match UI */
+.icon-inline {
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--sand);
+  margin-right: 5px;
+}
+.send-another-btn .icon-inline,
+.btn-reply .icon-inline,
+.btn-release .icon-inline,
+.report-btn .icon-inline { margin-right: 6px; }
+.report-btn .icon-inline { color: rgba(201,185,154,0.5); }
+.notif-em .icon-inline { margin-right: 0; color: var(--gold); }
+
+/* Tab bar — extra bottom padding so it sits lower (safe area + spacing) */
 .tab-bar {
   position: sticky;
   bottom: 0;
   left: 0; right: 0;
-  height: var(--tab-bar-height);
+  min-height: var(--tab-bar-height);
   background: rgba(6,10,20,0.96);
   border-top: 1px solid rgba(201,185,154,0.08);
   display: flex;
-  padding: 10px 0 24px;
+  padding: 10px 0 calc(28px + env(safe-area-inset-bottom, 16px));
   backdrop-filter: blur(16px);
   z-index: 50;
   box-sizing: border-box;
@@ -968,15 +982,16 @@
   pointer-events: none;
 }
 
-/* ===== WRITE ===== */
+/* ===== WRITE — no scroll: header + paper zone (flex) + bottom zone fixed ── */
 .write-screen {
+  height: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
   background: linear-gradient(160deg, #0d1e32 0%, #08101e 100%);
-  padding-bottom: var(--space-lg);
   padding-top: 59px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 .write-header {
   height: 56px;
@@ -992,15 +1007,17 @@
   box-sizing: border-box;
   flex-shrink: 0;
 }
-.write-scroll-content {
+.write-paper-zone {
   flex: 1;
-  overflow-y: auto;
-  padding-top: 20px;
-  padding-bottom: 40px;
+  min-height: 0;
+  margin: 16px 18px 12px;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
 }
-.write-content-inner {
-  padding: 0 18px;
+.write-bottom-zone {
+  flex-shrink: 0;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0));
   box-sizing: border-box;
 }
 .back-btn {
@@ -1029,6 +1046,18 @@
   letter-spacing: 0.08em;
 }
 
+.write-paper-zone .paper-wrap {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--parchment);
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), 0 2px 10px rgba(0,0,0,0.3);
+  overflow: hidden;
+  box-sizing: border-box;
+}
 .paper-wrap {
   margin: 20px var(--card-padding-h) 0;
   background: var(--parchment);
@@ -1039,7 +1068,18 @@
 }
 .paper-top {
   height: 4px;
+  flex-shrink: 0;
   background: linear-gradient(90deg, rgba(196,151,47,0.4) 0%, rgba(196,151,47,0.15) 100%);
+}
+.write-paper-zone .paper-inner {
+  flex: 1;
+  min-height: 0;
+  padding: 24px 20px 16px;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 .paper-inner {
   padding: 24px 20px 16px;
@@ -1053,6 +1093,12 @@
   inset: 24px 20px 16px;
   background: repeating-linear-gradient(transparent, transparent 27px, rgba(201,185,154,0.28) 27px, rgba(201,185,154,0.28) 28px);
   pointer-events: none;
+}
+.write-paper-zone .letter-textarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: block;
 }
 .letter-textarea {
   width: 100%;
@@ -1069,6 +1115,9 @@
   z-index: 1;
 }
 .letter-textarea::placeholder { color: rgba(26,26,46,0.28); font-style: italic; }
+.write-paper-zone .paper-footer {
+  flex-shrink: 0;
+}
 .paper-footer {
   padding: 12px 22px 16px;
   border-top: 1px solid rgba(201,185,154,0.2);
@@ -1093,10 +1142,15 @@
 }
 .draw-pill:hover { border-color: rgba(26,26,46,0.3); color: rgba(26,26,46,0.8); }
 
-.write-footer {
-  padding: 0 var(--card-padding-h);
-  margin-top: var(--space-xl);
-  box-sizing: border-box;
+.write-bottom-zone .time-capsule-section {
+  padding: 0;
+  margin: 0 0 8px;
+}
+.write-bottom-zone .send-note {
+  margin-bottom: 12px;
+}
+.write-bottom-zone .btn-send {
+  margin-bottom: 0;
 }
 .depth-nudge {
   min-height: 20px;
@@ -1632,15 +1686,26 @@
   padding-top: 59px;
   box-sizing: border-box;
 }
+/* Back button — fixed so it doesn’t scroll away */
 .profile-back-wrap {
-  padding-top: 16px;
-  padding-left: 20px;
-  margin-bottom: 8px;
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top, 59px));
+  left: 20px;
+  z-index: 100;
   display: flex;
   justify-content: flex-start;
 }
+.profile-screen .profile-back-wrap .back-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(201,185,154,0.15);
+}
 .profile-head {
+  margin-top: 20px;
   padding: 28px var(--screen-padding-h) 24px;
+  padding-top: calc(28px + env(safe-area-inset-top, 0px));
   text-align: center;
   border-bottom: 1px solid rgba(201,185,154,0.07);
   display: flex;

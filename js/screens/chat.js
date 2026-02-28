@@ -5,6 +5,7 @@
 import { getState } from '../state.js';
 import { getAvatarUrl } from '../lighthouse-avatars.js';
 import { addXP } from '../light-system.js';
+import { IconGlobe, IconStar } from '../components/EmojiIcons.js';
 
 export function renderChat(state) {
   const { routeParams = {}, threads = [] } = state;
@@ -22,7 +23,7 @@ export function renderChat(state) {
       (m) => `
     <div class="msg ${m.from}">
       <div class="msg-bubble">${escapeHtml(m.body)}</div>
-      ${m.translated ? '<div class="tl-note">🌐 translated from Italian</div>' : ''}
+      ${m.translated ? '<div class="tl-note">' + IconGlobe(12) + ' translated from Italian</div>' : ''}
       <div class="msg-time">${escapeHtml(m.time)}</div>
     </div>
   `
@@ -98,7 +99,7 @@ export function renderChat(state) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'react-btn';
-      btn.innerHTML = '✦';
+      btn.innerHTML = IconStar(14);
       btn.title = 'This stayed with me';
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -106,7 +107,7 @@ export function renderChat(state) {
         btn.classList.add('reacted');
         const float = document.createElement('span');
         float.className = 'react-float';
-        float.textContent = '✦';
+        float.innerHTML = IconStar(14);
         bubble.appendChild(float);
         setTimeout(() => float.remove(), 1000);
       });

@@ -4,6 +4,7 @@
 
 import { getAvatarHtml } from '../components/AvatarImage.js';
 import { getTabIcon } from '../components/TabIcons.js';
+import { IconLighthouse, IconStar } from '../components/EmojiIcons.js';
 
 export function renderProfile(state) {
   const { user = {}, lightSystem = {} } = state;
@@ -64,9 +65,9 @@ export function renderProfile(state) {
       <div class="lh-svg-wrap">${LIGHTHOUSE_SVG}<div class="lh-beam"></div></div>
       <div class="lh-status">brightness: active</div>
     </div>
-    <a href="/moments" class="profile-nav-link" id="profileMomentsLink">✦ Collected Lines <span id="momentsCount">${savedCount}</span></a>
+    <a href="/moments" class="profile-nav-link" id="profileMomentsLink">${IconStar(14)} Collected Lines <span id="momentsCount">${savedCount}</span></a>
     <div class="notif-block">
-      <div class="notif-em">🔦</div>
+      <div class="notif-em">${IconLighthouse(22)}</div>
       <div class="notif-body"><strong>Someone is waiting for your light.</strong><br>You haven't visited in 3 days. Your lighthouse is beginning to fade.</div>
     </div>
     <div class="tab-bar">

@@ -3,6 +3,7 @@
  */
 
 import { getState, setState } from '../state.js';
+import { IconGlobe, IconClock, IconPencil, IconStar, IconReport } from '../components/EmojiIcons.js';
 
 export function renderRead(state) {
   const { routeParams = {}, letters = [] } = state;
@@ -26,15 +27,15 @@ export function renderRead(state) {
     <div class="read-header">
       <button type="button" class="back-btn" id="read-back">←</button>
       <div class="read-from">from ${escapeHtml(letter?.from || '')}</div>
-      <button type="button" class="report-btn">⚑ Report</button>
+      <button type="button" class="report-btn">${IconReport(14)} Report</button>
     </div>
-    ${letter?.translatedFrom ? '<div class="translation-bar">🌐 Auto-translated from ' + escapeHtml(letter.translatedFrom) + '</div>' : ''}
-    <div class="time-capsule-bar">🕰 This letter traveled through time to reach you.</div>
+    ${letter?.translatedFrom ? '<div class="translation-bar">' + IconGlobe(14) + ' Auto-translated from ' + escapeHtml(letter.translatedFrom) + '</div>' : ''}
+    <div class="time-capsule-bar">${IconClock(14)} This letter traveled through time to reach you.</div>
     <div class="letter-paper" style="margin-top:14px;">
       <div class="letter-paper-top"></div>
       <div class="letter-paper-inner">
         <div class="letter-text">${bodyHtml}</div>
-        ${letter?.hasSketch ? `<div class="letter-sketch"><div class="sketch-placeholder">✏ ${escapeHtml(letter.sketchPlaceholder || 'a pencil sketch')}</div></div>` : ''}
+        ${letter?.hasSketch ? `<div class="letter-sketch"><div class="sketch-placeholder">${IconPencil(14)} ${escapeHtml(letter.sketchPlaceholder || 'a pencil sketch')}</div></div>` : ''}
         <div class="letter-sig">— ${escapeHtml(letter?.from || '')}${letter?.fromLocation ? ', ' + escapeHtml(letter.fromLocation) : ''}</div>
       </div>
     </div>
@@ -60,7 +61,7 @@ export function renderRead(state) {
       const next = [{ text: line, from: letter?.from || 'Unknown', date: 'Today' }, ...savedMoments].slice(0, 3);
       setState({ savedMoments: next });
       saveLineBtn.classList.add('saved');
-      saveLineBtn.innerHTML = '✦ Saved to Moments';
+      saveLineBtn.innerHTML = IconStar(14) + ' Saved to Moments';
       setTimeout(() => {
         saveLineBtn.classList.remove('saved');
         saveLineBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><polygon points="7,1 8.8,5.2 13.5,5.5 10,8.5 11.1,13.2 7,10.5 2.9,13.2 4,8.5 0.5,5.5 5.2,5.2"/></svg> Save a line';
