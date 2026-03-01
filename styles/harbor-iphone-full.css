@@ -99,13 +99,14 @@
   z-index: 20;
 }
 
-/* Screen area */
+/* Screen area — transform creates containing block so position:fixed stays inside frame */
 .iphone-screen {
   position: absolute;
   inset: 0;
   border-radius: 54px;
   overflow: hidden;
   background: var(--deep);
+  transform: translateZ(0);
 }
 
 /* Dynamic Island */
@@ -364,7 +365,7 @@
 .home-screen {
   min-height: 100%;
   background: linear-gradient(180deg, #08101e 0%, #0a0e1a 100%);
-  padding-bottom: 90px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   padding-top: 59px;
   box-sizing: border-box;
 }
@@ -922,16 +923,17 @@
 .report-btn .icon-inline { color: rgba(201,185,154,0.5); }
 .notif-em .icon-inline { margin-right: 0; color: var(--gold); }
 
-/* Tab bar — extra bottom padding so it sits lower (safe area + spacing) */
+/* Tab bar — fixed at very bottom of viewport, never scrolls */
 .tab-bar {
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   min-height: var(--tab-bar-height);
   background: rgba(6,10,20,0.96);
   border-top: 1px solid rgba(201,185,154,0.08);
   display: flex;
-  padding: 10px 0 calc(28px + env(safe-area-inset-bottom, 16px));
+  padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0));
   backdrop-filter: blur(16px);
   z-index: 50;
   box-sizing: border-box;
@@ -1682,7 +1684,7 @@
 .profile-screen {
   min-height: 100%;
   background: linear-gradient(180deg, #08101e 0%, #0a0e1a 100%);
-  padding-bottom: 90px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0));
   padding-top: 59px;
   box-sizing: border-box;
 }
@@ -1874,27 +1876,27 @@
 .lh-status { font-size: 12.5px; color: var(--gold); margin-top: 20px; font-style: italic; opacity: 0.8; }
 
 .notif-block {
-  margin: 16px 18px 0;
-  padding: 18px;
-  background: rgba(196,151,47,0.05);
-  border: 1px solid rgba(196,151,47,0.18);
-  border-radius: var(--card-border-radius);
-  display: flex;
-  flex-direction: row;
-  gap: 14px;
-  align-items: flex-start;
+  margin: 12px 18px 0;
+  padding: 16px;
+  background: rgba(196,151,47,0.06);
+  border: 1px solid rgba(196,151,47,0.15);
+  border-radius: 10px;
   box-sizing: border-box;
 }
-.notif-em { font-size: 22px; line-height: 22px; flex-shrink: 0; }
-.notif-body {
-  flex: 1;
-  font-size: 13px;
-  line-height: 20px;
-  color: rgba(232,228,217,0.65);
-  font-style: italic;
-  min-width: 0;
+.notif-body .notif-title {
+  display: block;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
 }
-.notif-body strong { color: var(--gold); font-style: normal; font-size: 14px; display: block; margin-bottom: 4px; }
+.notif-body .notif-desc {
+  font-size: 13px;
+  line-height: 19px;
+  color: rgba(232,228,217,0.5);
+  font-style: italic;
+}
 
 /* Canvas modal */
 .canvas-modal {
@@ -2405,7 +2407,7 @@
 .modal-sheet-body .btn-primary { margin-top: 16px; }
 
 /* ========== V2 ========== */
-.map-screen { min-height: 100%; background: linear-gradient(160deg, #051018 0%, #080f18 100%); padding-top: 59px; padding-bottom: 100px; }
+.map-screen { min-height: 100%; background: linear-gradient(160deg, #051018 0%, #080f18 100%); padding-top: 59px; padding-bottom: calc(100px + env(safe-area-inset-bottom, 0)); }
 .map-header { padding: 16px 18px 12px; }
 .map-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; letter-spacing: 0.15em; color: var(--foam); }
 .map-subtitle { font-size: 11px; color: rgba(196,151,47,0.6); letter-spacing: 0.1em; margin-top: 4px; }
