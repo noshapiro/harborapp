@@ -1,7 +1,9 @@
-# Video for Splash screen
+# Videos
 
-Add a short looping video (4–8 seconds) of a glass bottle drifting on dark ocean at night with moonlight and stars.
+## Splash screen
+- **Filename:** `bottle_loop.mp4`  
+  Short looping video (4–8 s) of a bottle on dark ocean at night. Used as full-screen background (muted, looped, cover).
 
-**Filename:** `bottle_loop.mp4`
-
-Place it in this folder. The splash screen will use it as full-screen background (muted, looped, cover).
+## Letter drifting (transit) screen
+- **Filename:** `bottle-drift.mp4`  
+  Looping video for the “your letter is drifting” screen (upper 60% of the screen). Same folder: place the file here and it will load automatically.

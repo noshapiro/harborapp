@@ -52,9 +52,12 @@ function initLeafletMap(container) {
     zoomControl: false,
     attributionControl: false,
   });
-  window.L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-    maxZoom: 8,
+  // Carto Dark — бесплатные тёмные тайлы без API key (Stadia Maps требует ключ → 401 на Vercel)
+  window.L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    subdomains: 'abcd',
+    maxZoom: 19,
     tileSize: 256,
+    attribution: '© CARTO © OpenStreetMap',
   }).addTo(map);
   map.setView([30, 10], 2);
   map.setMinZoom(1.5);
@@ -97,7 +100,7 @@ export function renderMap(state) {
     '<div class="map-canvas-wrap map-wrapper"><div id="worldMap" class="map-leaflet"></div>' +
     '<div class="map-legend"><div class="legend-item"><span class="legend-dot active"></span>Active lighthouse</div>' +
     '<div class="legend-item"><span class="legend-dot storm"></span>Storm zone</div><div class="legend-item"><span class="legend-dot drift"></span>Letter in transit</div></div>' +
-    '<div class="map-attribution">© Stadia Maps  © OpenMapTiles  © OpenStreetMap</div></div>' +
+    '<div class="map-attribution">© CARTO  © OpenStreetMap</div></div>' +
     '<div class="map-you-section"><div class="map-you-label">Your light</div><div class="map-you-stat">reached <strong id="reachedCount">' +
     reached +
     '</strong> strangers across <strong>17</strong> countries</div></div>' +
