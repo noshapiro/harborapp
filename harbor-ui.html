@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Harbor — UI Prototype</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
     --ink: #1a1a2e; --deep: #0d1b2a; --ocean: #0f3460; --wave: #16213e;
     --foam: #e8e4d9; --parchment: #f5f0e8; --sand: #c9b99a; --gold: #c4972f;
   }
-  body { font-family: 'Crimson Pro', serif; background: var(--deep); color: var(--foam); min-height: 100vh; overflow-x: hidden; }
+  body { font-family: 'Lora', serif; background: var(--deep); color: var(--foam); min-height: 100vh; overflow-x: hidden; }
 
   .nav { display:flex; justify-content:center; gap:6px; padding:24px 32px 0; flex-wrap:wrap; }
-  .nav button { background:transparent; border:1px solid rgba(232,228,217,0.2); color:var(--foam); padding:8px 18px; border-radius:24px; font-family:'Crimson Pro',serif; font-size:14px; cursor:pointer; letter-spacing:0.05em; transition:all 0.3s; opacity:0.6; }
+  .nav button { background:transparent; border:1px solid rgba(232,228,217,0.2); color:var(--foam); padding:8px 18px; border-radius:24px; font-family:'Lora',serif; font-size:14px; cursor:pointer; letter-spacing:0.05em; transition:all 0.3s; opacity:0.6; }
   .nav button.active, .nav button:hover { border-color:var(--sand); color:var(--parchment); opacity:1; background:rgba(201,185,154,0.08); }
 
   .screen { display:none; }
@@ -47,7 +47,7 @@
   .splash-subtitle { font-size:16px; font-weight:300; color:var(--sand); letter-spacing:0.1em; font-style:italic; animation:fadeUp 1.2s 0.3s ease-out both; opacity:0; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
   .splash-cta { position:absolute; bottom:8%; left:50%; transform:translateX(-50%); z-index:20; text-align:center; animation:fadeUp 1.2s 0.8s ease-out both; opacity:0; }
-  .btn-primary { display:inline-block; padding:14px 42px; border:1px solid var(--sand); color:var(--parchment); font-family:'Crimson Pro',serif; font-size:16px; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; background:transparent; transition:all 0.4s; position:relative; overflow:hidden; }
+  .btn-primary { display:inline-block; padding:14px 42px; border:1px solid var(--sand); color:var(--parchment); font-family:'Lora',serif; font-size:16px; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; background:transparent; transition:all 0.4s; position:relative; overflow:hidden; }
   .btn-primary::before { content:''; position:absolute; inset:0; background:var(--sand); transform:scaleX(0); transform-origin:left; transition:transform 0.4s; z-index:-1; }
   .btn-primary:hover { color:var(--ink); }
   .btn-primary:hover::before { transform:scaleX(1); }
@@ -91,10 +91,10 @@
   .write-header-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; letter-spacing:0.1em; font-style:italic; }
   .paper-area { margin:24px 20px; background:var(--parchment); border-radius:1px; padding:32px 28px; min-height:340px; position:relative; box-shadow:0 4px 30px rgba(0,0,0,0.4); }
   .paper-area::before { content:''; position:absolute; inset:32px 28px; background:repeating-linear-gradient(transparent,transparent 27px,rgba(201,185,154,0.3) 27px,rgba(201,185,154,0.3) 28px); pointer-events:none; }
-  .letter-textarea { width:100%; min-height:280px; background:transparent; border:none; outline:none; font-family:'Crimson Pro',serif; font-size:17px; line-height:28px; color:var(--ink); resize:none; position:relative; z-index:1; }
+  .letter-textarea { width:100%; min-height:280px; background:transparent; border:none; outline:none; font-family:'Lora',serif; font-size:17px; line-height:28px; color:var(--ink); resize:none; position:relative; z-index:1; }
   .letter-textarea::placeholder { color:rgba(26,26,46,0.3); font-style:italic; }
   .drawing-strip { margin:0 20px; border:1px solid rgba(201,185,154,0.15); border-top:none; padding:14px 18px; display:flex; align-items:center; gap:12px; }
-  .draw-btn { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; background:none; border:1px solid rgba(201,185,154,0.2); color:var(--sand); padding:7px 16px; border-radius:24px; font-family:'Crimson Pro',serif; letter-spacing:0.05em; transition:all 0.3s; }
+  .draw-btn { display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; background:none; border:1px solid rgba(201,185,154,0.2); color:var(--sand); padding:7px 16px; border-radius:24px; font-family:'Lora',serif; letter-spacing:0.05em; transition:all 0.3s; }
   .draw-btn:hover { border-color:var(--sand); background:rgba(201,185,154,0.08); }
   .send-area { margin:20px; display:flex; flex-direction:column; gap:12px; }
   .send-note { font-size:12px; color:rgba(232,228,217,0.3); text-align:center; letter-spacing:0.05em; font-style:italic; }
@@ -105,19 +105,19 @@
   /* READ */
   .read-screen { min-height:100vh; background:linear-gradient(160deg,#0f1f35 0%,#0a0e1a 100%); padding-bottom:100px; }
   .read-header { padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(201,185,154,0.08); }
-  .report-btn { font-size:12px; cursor:pointer; letter-spacing:0.05em; background:none; border:none; color:rgba(232,228,217,0.3); font-family:'Crimson Pro',serif; transition:color 0.2s; }
+  .report-btn { font-size:12px; cursor:pointer; letter-spacing:0.05em; background:none; border:none; color:rgba(232,228,217,0.3); font-family:'Lora',serif; transition:color 0.2s; }
   .report-btn:hover { color:rgba(232,228,217,0.7); }
   .translation-bar { margin:16px 20px 0; padding:10px 16px; background:rgba(196,151,47,0.07); border:1px solid rgba(196,151,47,0.2); border-radius:2px; font-size:12px; color:rgba(196,151,47,0.8); letter-spacing:0.05em; display:flex; align-items:center; gap:8px; }
   .letter-paper { margin:16px 20px; background:var(--parchment); padding:32px 28px; box-shadow:0 4px 30px rgba(0,0,0,0.4); position:relative; }
   .letter-paper::before { content:''; position:absolute; inset:32px 28px; background:repeating-linear-gradient(transparent,transparent 27px,rgba(201,185,154,0.3) 27px,rgba(201,185,154,0.3) 28px); pointer-events:none; }
-  .letter-text { font-family:'Crimson Pro',serif; font-size:17px; line-height:28px; color:var(--ink); font-style:italic; position:relative; z-index:1; }
+  .letter-text { font-family:'Lora',serif; font-size:17px; line-height:28px; color:var(--ink); font-style:italic; position:relative; z-index:1; }
   .letter-sketch { margin-top:20px; border-top:1px solid rgba(201,185,154,0.4); padding-top:16px; text-align:center; }
   .sketch-placeholder { width:100%; height:100px; background:repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(201,185,154,0.15) 4px,rgba(201,185,154,0.15) 5px); border-radius:2px; display:flex; align-items:center; justify-content:center; font-size:13px; color:rgba(26,26,46,0.3); font-style:italic; }
   .from-tag { font-size:12px; color:rgba(26,26,46,0.4); text-align:right; margin-top:20px; font-style:italic; position:relative; z-index:1; }
   .letter-actions { margin:0 20px; display:flex; flex-direction:column; gap:10px; }
   .btn-reply { width:100%; padding:15px; background:transparent; border:1px solid rgba(196,151,47,0.4); color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:300; letter-spacing:0.15em; cursor:pointer; transition:all 0.3s; }
   .btn-reply:hover { background:rgba(196,151,47,0.08); }
-  .btn-release { width:100%; padding:12px; background:transparent; border:1px solid rgba(201,185,154,0.1); color:rgba(232,228,217,0.3); font-family:'Crimson Pro',serif; font-size:14px; letter-spacing:0.1em; font-style:italic; cursor:pointer; transition:all 0.3s; }
+  .btn-release { width:100%; padding:12px; background:transparent; border:1px solid rgba(201,185,154,0.1); color:rgba(232,228,217,0.3); font-family:'Lora',serif; font-size:14px; letter-spacing:0.1em; font-style:italic; cursor:pointer; transition:all 0.3s; }
   .btn-release:hover { border-color:rgba(201,185,154,0.2); color:rgba(232,228,217,0.5); }
 
   /* CHAT */
@@ -128,7 +128,7 @@
   .chat-avatar::after { content:''; position:absolute; top:4px; left:50%; transform:translateX(-50%); width:11px; height:6px; background:rgba(196,151,47,0.6); border-radius:2px 2px 0 0; }
   .chat-username { font-size:14px; letter-spacing:0.05em; color:var(--foam); }
   .chat-sub { font-size:11px; color:var(--sand); opacity:0.6; font-style:italic; }
-  .chat-delete-btn { font-size:12px; cursor:pointer; background:none; border:none; color:rgba(232,228,217,0.25); font-family:'Crimson Pro',serif; letter-spacing:0.05em; transition:color 0.2s; }
+  .chat-delete-btn { font-size:12px; cursor:pointer; background:none; border:none; color:rgba(232,228,217,0.25); font-family:'Lora',serif; letter-spacing:0.05em; transition:color 0.2s; }
   .chat-delete-btn:hover { color:rgba(220,100,100,0.6); }
   .chat-messages { flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; min-height:400px; }
   .msg { max-width:78%; }
@@ -143,7 +143,7 @@
   .contact-exchange-bar { margin:0 16px 12px; padding:10px 16px; background:rgba(196,151,47,0.06); border:1px solid rgba(196,151,47,0.15); border-radius:2px; font-size:12px; color:rgba(196,151,47,0.6); text-align:center; cursor:pointer; transition:all 0.3s; letter-spacing:0.05em; font-style:italic; }
   .contact-exchange-bar:hover { background:rgba(196,151,47,0.1); color:rgba(196,151,47,0.9); }
   .chat-input-area { padding:12px 16px 20px; border-top:1px solid rgba(201,185,154,0.08); background:rgba(10,14,26,0.9); backdrop-filter:blur(8px); display:flex; gap:10px; align-items:flex-end; }
-  .chat-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(201,185,154,0.15); border-radius:2px; padding:12px 14px; color:var(--foam); font-family:'Crimson Pro',serif; font-size:15px; font-style:italic; outline:none; resize:none; min-height:44px; max-height:100px; }
+  .chat-input { flex:1; background:rgba(255,255,255,0.04); border:1px solid rgba(201,185,154,0.15); border-radius:2px; padding:12px 14px; color:var(--foam); font-family:'Lora',serif; font-size:15px; font-style:italic; outline:none; resize:none; min-height:44px; max-height:100px; }
   .chat-input::placeholder { color:rgba(232,228,217,0.2); }
   .chat-input:focus { border-color:rgba(201,185,154,0.3); }
   .send-msg-btn { width:44px; height:44px; background:rgba(196,151,47,0.15); border:1px solid rgba(196,151,47,0.3); border-radius:50%; color:var(--gold); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all 0.3s; }
@@ -181,7 +181,7 @@
   .canvas-tools { display:flex; gap:10px; margin-top:12px; justify-content:center; flex-wrap:wrap; }
   .color-dot { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s; }
   .color-dot.selected { border-color:var(--foam); }
-  .canvas-btn { padding:6px 16px; background:none; border:1px solid rgba(26,26,46,0.3); color:var(--ink); font-family:'Crimson Pro',serif; font-size:14px; cursor:pointer; border-radius:20px; transition:all 0.2s; }
+  .canvas-btn { padding:6px 16px; background:none; border:1px solid rgba(26,26,46,0.3); color:var(--ink); font-family:'Lora',serif; font-size:14px; cursor:pointer; border-radius:20px; transition:all 0.2s; }
   .canvas-btn:hover { background:rgba(26,26,46,0.1); }
   .canvas-btn.done { background:var(--ink); color:var(--parchment); }
   .screen-label { text-align:center; font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(201,185,154,0.25); padding:10px; border-bottom:1px solid rgba(201,185,154,0.06); }
