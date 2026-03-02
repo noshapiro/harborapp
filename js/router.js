@@ -1,6 +1,6 @@
 /**
  * History API router: pushState / popstate, no hash
- * Routes: /splash, /home, /write, /read/:letterId, /chat/:threadId, /profile
+ * Routes: /splash → /onboarding → /onboard (Identity) → /home, /write, …
  */
 
 const routes = [

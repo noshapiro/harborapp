@@ -66,10 +66,21 @@ const screens = {
 
 function renderScreen(name, params) {
   const fn = screens[name];
-  if (fn) {
-    appEl.innerHTML = '';
+  if (!fn) {
+    console.warn('[harbor] No screen registered for route:', name);
+    return;
+  }
+  appEl.innerHTML = '';
+  try {
     const wrap = fn({ ...getState(), routeParams: params });
     if (wrap) appEl.appendChild(wrap);
+  } catch (err) {
+    console.error('[harbor] renderScreen failed:', name, err);
+    const fallback = document.createElement('div');
+    fallback.className = 'screen active';
+    fallback.style.cssText = 'padding:2rem;color:#c9b99a;font-family:serif;';
+    fallback.textContent = 'Something went wrong. Check console.';
+    appEl.appendChild(fallback);
   }
   // Sync nav pills (dev)
   const pills = document.getElementById('nav-pills');
@@ -92,6 +103,25 @@ function handleRoute(e) {
 window.addEventListener('route', handleRoute);
 
 window.harborNavigate = navigate;
+
+// 1) Links with href="/..." inside #app: prevent full reload, use SPA navigate (capture, so runs first)
+appEl.addEventListener('click', (e) => {
+  const a = e.target.closest('a[href^="/"]');
+  if (a && a.getAttribute('href').startsWith('/')) {
+    const path = a.getAttribute('href').split('?')[0].split('#')[0].trim() || '/';
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(path);
+    return;
+  }
+  const el = e.target.closest('[data-navigate]');
+  if (!el) return;
+  const route = el.getAttribute('data-navigate');
+  if (!route) return;
+  e.preventDefault();
+  e.stopPropagation();
+  navigate(route);
+}, true);
 
 // Nav pills click (dev) — только клик по самой панели, чтобы не перехватывать клики по экрану
 document.getElementById('nav-pills')?.addEventListener('click', (e) => {

@@ -48,7 +48,7 @@ export function renderSplash() {
       </div>
       <div class="splash-spacer-cta" style="height:52px;"></div>
       <div class="splash-cta-block splash-entrance-cta">
-        <button type="button" class="splash-btn-begin" id="splash-begin">BEGIN</button>
+        <a href="/onboarding" class="splash-btn-begin" id="splash-begin" data-navigate="onboarding" role="button">BEGIN</a>
         <p class="splash-hint">anonymous · borderless · between people</p>
       </div>
     </div>
@@ -62,9 +62,9 @@ export function renderSplash() {
     });
   }
 
-  const beginBtn = splash.querySelector('#splash-begin');
-  if (beginBtn) {
-    beginBtn.addEventListener('click', (e) => {
+  const beginLink = splash.querySelector('#splash-begin');
+  if (beginLink) {
+    beginLink.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       navigate('onboarding');
