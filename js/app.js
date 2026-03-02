@@ -6,6 +6,7 @@ import { getState, setState, subscribe } from './state.js';
 import { navigate, init as initRouter } from './router.js';
 import { mockUser, mockLetters, mockThreads, mockSentLetters } from './mock-data.js';
 import { renderSplash } from './screens/splash.js';
+import { renderOnboarding } from './screens/onboarding.js';
 import { renderOnboard } from './screens/onboard.js';
 import { renderFirstLetter } from './screens/firstletter.js';
 import { renderHome } from './screens/home.js';
@@ -50,6 +51,7 @@ if (!appEl) throw new Error('#app root not found');
 
 const screens = {
   splash: renderSplash,
+  onboarding: renderOnboarding,
   onboard: renderOnboard,
   firstletter: renderFirstLetter,
   home: renderHome,
@@ -91,9 +93,11 @@ window.addEventListener('route', handleRoute);
 
 window.harborNavigate = navigate;
 
-// Nav pills click (dev)
+// Nav pills click (dev) — только клик по самой панели, чтобы не перехватывать клики по экрану
 document.getElementById('nav-pills')?.addEventListener('click', (e) => {
-  const route = e.target.closest('button')?.dataset?.route;
+  if (!e.target.closest('#nav-pills')) return;
+  const btn = e.target.closest('button');
+  const route = btn?.dataset?.route;
   if (route) navigate(route);
 });
 

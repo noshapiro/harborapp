@@ -3,6 +3,8 @@
  * Layout: spacer | wordmark block | CTA block (fixed to bottom)
  */
 
+import { navigate } from '../router.js';
+
 // Path from app root so video loads when URL is /splash (SPA)
 function getVideoSrc() {
   const path = '/assets/videos/bottle_loop.mp4';
@@ -60,9 +62,14 @@ export function renderSplash() {
     });
   }
 
-  splash.querySelector('#splash-begin').addEventListener('click', () => {
-    window.harborNavigate('onboard');
-  });
+  const beginBtn = splash.querySelector('#splash-begin');
+  if (beginBtn) {
+    beginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      navigate('onboarding');
+    });
+  }
 
   wrap.appendChild(splash);
   return wrap;

@@ -5,6 +5,7 @@
 
 const routes = [
   { path: '/splash', name: 'splash' },
+  { path: '/onboarding', name: 'onboarding' },
   { path: '/onboard', name: 'onboard' },
   { path: '/firstletter', name: 'firstletter' },
   { path: '/home', name: 'home' },
